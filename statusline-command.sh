@@ -143,9 +143,12 @@ if [ -n "$tin" ]; then
 fi
 
 # --- rate limits (from stdin; resets_at is a unix epoch) ---
+# round the percentages: stdin can carry float artifacts like 28.000000000000004
 rl5_pct=$(J '.rate_limits.five_hour.used_percentage // empty')
+[ -n "$rl5_pct" ] && rl5_pct=$(printf '%.0f' "$rl5_pct")
 rl5_reset=$(J '.rate_limits.five_hour.resets_at // empty')
 rl7_pct=$(J '.rate_limits.seven_day.used_percentage // empty')
+[ -n "$rl7_pct" ] && rl7_pct=$(printf '%.0f' "$rl7_pct")
 rl7_reset=$(J '.rate_limits.seven_day.resets_at // empty')
 
 delta_epoch() {
