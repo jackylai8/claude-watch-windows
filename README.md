@@ -87,26 +87,43 @@ bash ~/.claude/tokmark.sh clear    # reset to cumulative
 ## Requirements
 
 - **Claude Code** on Windows — installs Git Bash, which provides `bash`, `git`, `sed`, `stat`, `date`.
-- **jq** — the installer finds a system `jq`, uses a bundled `jq.exe` if you add one,
-  or installs it via `winget install jqlang.jq`.
+- **jq** — **bundled** as `jq.exe` in this repo; the installer copies it into `~/.claude`.
+  No separate install, no winget, no admin rights needed.
 - **Claude Code ≥ 2.1.x** — the status line reads `rate_limits` from stdin, added in 2.1.
 
 ---
 
-## Install (Windows)
+## Install
 
-1. Clone or download this repo.
-2. Run the installer:
-   ```powershell
-   powershell -ExecutionPolicy Bypass -File .\install.ps1
-   ```
-   (or right-click `install.ps1` → **Run with PowerShell**)
-3. **Restart Claude Code.**
+Clone or download the **whole repo** (not just one file), then pick one:
 
-The installer is idempotent. It copies the scripts into `%USERPROFILE%\.claude\`,
-copies `tok.md` into `.claude\commands\`, merges `statusLine` into your
-`settings.json` (backing it up to `settings.json.bak-statusline`), and removes any
-obsolete `fetch-usage.sh` hooks from earlier versions.
+### Recommended — Git Bash  ✅ works on managed/corporate PCs
+
+Open **Git Bash** (ships with Claude Code / Git for Windows), `cd` into the folder, and:
+
+```bash
+bash install.sh
+```
+
+Then **restart Claude Code**. Git Bash is not subject to the PowerShell execution
+policy, so this works even on locked-down machines where `install.ps1` is blocked.
+
+### Alternative — PowerShell
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\install.ps1
+```
+
+> **Managed PC?** If your company enforces the execution policy via Group Policy,
+> even `-ExecutionPolicy Bypass` is ignored and this will fail with red errors.
+> First try `Unblock-File .\install.ps1`; if it's still blocked, **use `install.sh`
+> above** — that's what it's for.
+
+Both installers are idempotent. They copy the scripts into `%USERPROFILE%\.claude\`,
+copy `tok.md` into `.claude\commands\`, drop in the bundled `jq.exe`, merge
+`statusLine` into your `settings.json` (backing it up to `settings.json.bak-statusline`),
+and remove any obsolete `fetch-usage.sh` hooks from earlier claude-watch versions —
+without touching your other keys or hooks.
 
 ### Manual install (any OS with Git Bash / WSL)
 

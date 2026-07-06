@@ -1,6 +1,3 @@
-# local jq binary (installer fetches it via winget, or drop your own)
-jq.exe
-
 # OS / editor cruft
 Thumbs.db
 desktop.ini
